@@ -7,55 +7,189 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Berikut adalah contoh `README.md` lengkap untuk proyek **Laravel 12 API dengan JWT Auth**, cocok digunakan untuk dokumentasi internal maupun publik:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+````md
+# 🔐 Laravel 12 API Starter - JWT Auth
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Project ini adalah starter template API menggunakan **Laravel 12** dengan fitur autentikasi berbasis **JWT (JSON Web Token)**.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Fitur
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Register & Login API
+- JWT Authentication
+- Middleware `auth:api`
+- Struktur direktori rapi (berbasis service)
+- Laravel 12 baru (tanpa Kernel)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ⚙️ Persiapan
 
-### Premium Partners
+### 1. Clone Repo
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+````
 
-## Contributing
+### 2. Install Dependency
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+### 3. Salin file `.env`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+### 4. Generate App Key
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🧩 Instalasi JWT Auth
+
+```bash
+composer require tymon/jwt-auth
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+```
+
+Ini akan menambahkan `JWT_SECRET` otomatis ke file `.env`.
+
+---
+
+## 🛠️ Konfigurasi Auth
+
+Edit file `config/auth.php`:
+
+```php
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
+```
+
+---
+
+## 🧪 Jalankan Project
+
+```bash
+php artisan serve
+```
+
+API akan bisa diakses di:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 📡 Endpoint API
+
+### ✅ Register
+
+`POST /api/v1/register`
+
+**Body:**
+
+```json
+{
+  "name": "Anam Maulana",
+  "email": "anam@example.com",
+  "password": "rahasia123",
+  "password_confirmation": "rahasia123"
+}
+```
+
+---
+
+### ✅ Login
+
+`POST /api/v1/login`
+
+```json
+{
+  "email": "anam@example.com",
+  "password": "rahasia123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Login successful",
+  "token": "jwt_token_here"
+}
+```
+
+---
+
+### 🔐 Protected Route (JWT)
+
+`GET /api/v1/me`
+Gunakan `Authorization: Bearer <token>` di header.
+
+---
+
+### 🔒 Logout
+
+`POST /api/v1/logout`
+Juga membutuhkan token.
+
+---
+
+## 📁 Struktur Direktori (Ringkas)
+
+```
+app/
+├── Http/
+│   └── Controllers/
+│       └── Api/
+│           └── AuthController.php
+├── Services/
+│   └── AuthService.php
+routes/
+└── api.php
+```
+
+---
+
+## 📋 Tips Tambahan
+
+* Gunakan Postman/Insomnia untuk uji API.
+* Simpan token di localStorage/sessionStorage kalau pakai frontend.
+* Untuk dokumentasi otomatis, bisa tambah package seperti `darkaonline/l5-swagger`.
+
+---
+
+## 👤 Author
+
+Made with ❤️ by **Anam Maulana**
+Email: `anam@example.com`
+
+```
+
+---
+
+Kalau kamu mau ini dijadikan file `.md` atau dimodifikasi untuk fitur tambahan (role-permission, verifikasi email, dsb), tinggal bilang aja!
+```
+
