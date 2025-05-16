@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -69,4 +70,22 @@ class AuthController extends Controller
         auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
     }
+
+    public function refresh()
+{
+    try {
+        $newToken = JWTAuth::parseToken()->refresh();
+
+        return response()->json([
+            'token' => $newToken,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60, // detik
+            'ttl' => config('jwt.ttl'),           // ambil dari config/jwt.php
+            'refresh_ttl' => config('jwt.refresh_ttl'),
+        ]);
+    } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+        return response()->json(['error' => 'Invalid token'], 401);
+    }
+}
+
 }
